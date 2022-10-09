@@ -2,6 +2,7 @@ package com.susie.api.service;
 
 import com.susie.api.dto.UserRequest;
 import com.susie.api.entity.User;
+import com.susie.api.exception.UserNotFoundException;
 import com.susie.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,12 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User getUser(int id) {
-        return repository.findByUserId(id);
+    public User getUser(int id) throws UserNotFoundException {
+        User user = repository.findByUserId(id);
+        if (user!=null) {
+            return user;
+        } else {
+            throw new UserNotFoundException("user not found with id: "+id);
+        }
     }
 }
